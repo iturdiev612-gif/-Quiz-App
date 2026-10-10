@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#11111f">
+    <title>QuizMaster — Викторина</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+    <header class="header">
+        <a href="#" class="logo" id="homeLogo">
+            <span class="logo-icon">Q</span>
+            Quiz<span>Master</span>
+        </a>
+
+        <div class="header-actions">
+            <div class="best-score">
+                <span>🏆</span>
+                <span>Рекорд: <b id="headerBest">0</b></span>
+            </div>
+
+            <button class="icon-btn" id="themeBtn"
+                    aria-label="Переключить тему" title="Сменить тему">
+                ☀️
+            </button>
+            <button class="icon-btn" id="soundBtn"
+                    aria-label="Звук" title="Включить или выключить звук">
+                🔊
+            </button>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- Главная страница -->
+        <section class="screen active" id="homeScreen">
+            <div class="hero">
+                <div class="hero-badge">
+                    <span class="pulse-dot"></span>
+                    ПРОВЕРЬ СВОИ ЗНАНИЯ
+                </div>
+
+                <h1>Насколько ты<br> <span>умён?</span></h1>
+
+                <p class="hero-description">
+                    Отвечай на вопросы, соревнуйся с самим собой
+                    и устанавливай новые рекорды!
+                </p>
+
+                <div class="stats">
+                    <div class="stat-card">
+                        <span class="stat-icon">🧠</span>
+                        <strong>12+</strong>
+                        <small>Вопросов в базе</small>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-icon">⏱️</span>
+                        <strong>15 сек</strong>
+                        <small>На ответ</small>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-icon">🎯</span>
+                        <strong>100%</strong>
+                        <small>Твоя цель</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="setup-card">
+                <div class="section-heading">
+                    <div>
+                        <span class="eyebrow">ПОДГОТОВКА</span>
+                        <h2>Настрой свою игру</h2>
+                    </div>
+                    <span class="heading-icon">⚙️</span>
+                </div>
+
+                <form id="quizForm">
+                    <div class="form-group">
+                        <label for="category">Категория вопросов</label>
+                        <select id="category">
+                            <option value="all">🌎 Все категории</option>
+                            <option value="web">💻 Программирование</option>
+                            <option value="science">🔬 Наука</option>
+                            <option value="general">🌍 Общие знания</option>
+                        </select>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="difficulty">Сложность</label>
+                            <select id="difficulty">
+                                <option value="easy">🟢 Лёгкая</option>
+                                <option value="medium" selected>🟡 Средняя</option>
+                                <option value="hard">🔴 Сложная</option>
+                                <option value="all">🎲 Любая</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="questionCount">Вопросов</label>
+                            <select id="questionCount">
+                                <option value="5">5 вопросов</option>
+                                <option value="10" selected>10 вопросов</option>
+                                <option value="15">15 вопросов</option>
+                                <option value="20">20 вопросов</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="timeLimit">Время на один вопрос</label>
+                        <select id="timeLimit">
+                            <option value="10">10 секунд</option>
+                            <option value="15" selected>15 секунд</option>
+                            <option value="30">30 секунд</option>
+                            <option value="60">60 секунд</option>
+                            <option value="0">Без таймера</option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="primary-btn">
+                        Начать викторину <span>→</span>
+                    </button>
+
+                    <p class="form-note">✨ Каждый новый раунд — новый вызов!</p>
+                </form>
+            </div>
+
+            <div class="tips-card">
+                <span class="tips-icon">💡</span>
+                <div>
+                    <h3>Совет дня</h3>
+                    <p>Не спеши выбирать ответ. Внимательно прочитай вопрос и используй свои знания!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Экран викторины -->
+        <section class="screen" id="quizScreen">
+            <div class="quiz-top">
+                <button class="back-btn" id="quitBtn">← Выйти</button>
+                <span class="category-badge" id="quizCategory">Общие знания</span>
+            </div>
+
+            <div class="quiz-card">
+                <div class="quiz-meta">
+                    <span id="questionCounter">Вопрос 1 из 10</span>
+                    <span class="difficulty-label" id="difficultyLabel">Средняя</span>
+                </div>
+
+                <div class="progress-track">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+
+                <div class="timer-row">
+                    <span>⏳ Осталось времени</span>
+                    <strong id="timerText">15 сек</strong>
+                </div>
+
+                <div class="timer-track" id="timerTrack">
+                    <div class="timer-fill" id="timerFill"></div>
+                </div>
+
+                <div class="question-area">
+                    <div class="question-number" id="questionNumber">01</div>
+                    <h2 id="questionText">Загрузка вопроса...</h2>
+                    <p class="question-hint">Выбери один правильный ответ</p>
+                </div>
+
+                <div class="answers" id="answers"></div>
+
+                <div class="feedback" id="feedback" aria-live="polite"></div>
+
+                <button class="primary-btn next-btn" id="nextBtn" disabled>
+                    Следующий вопрос <span>→</span>
+                </button>
+            </div>
+
+            <p class="quiz-footer">QUIZMASTER · ТВОИ ЗНАНИЯ — ТВОЯ СИЛА</p>
+        </section>
+
+        <!-- Экран результата -->
+        <section class="screen" id="resultScreen">
+            <div class="result-card">
+                <div class="result-emoji" id="resultEmoji">🏆</div>
+                <span class="eyebrow">ВИКТОРИНА ЗАВЕРШЕНА</span>
+                <h1 id="resultTitle">Отличная работа!</h1>
+                <p id="resultDescription">Ты завершил тест.</p>
+
+                <div class="score-circle" id="scoreCircle">
+                    <div class="score-inner">
+                        <strong id="scorePercent">0%</strong>
+                        <span>Результат</span>
+                    </div>
+                </div>
+
+                <div class="result-stats">
+                    <div class="result-stat">
+                        <span>✅</span>
+                        <strong id="correctCount">0</strong>
+                        <small>Правильно</small>
+                    </div>
+                    <div class="result-stat">
+                        <span>❌</span>
+                        <strong id="wrongCount">0</strong>
+                        <small>Ошибки</small>
+                    </div>
+                    <div class="result-stat">
+                        <span>⭐</span>
+                        <strong id="totalPoints">0</strong>
+                        <small>Баллы</small>
+                    </div>
+                </div>
+
+                <div class="result-time">
+                    <span>⏱️ Время прохождения</span>
+                    <strong id="resultTime">00:00</strong>
+                </div>
+
+                <p class="record-message" id="recordMessage"></p>
+
+                <button class="primary-btn" id="reviewBtn">
+                    📋 Посмотреть ответы
+                </button>
+                <button class="secondary-btn" id="retryBtn">
+                    🔄 Пройти ещё раз
+                </button>
+                <button class="text-btn" id="homeBtn">
+                    На главную
+                </button>
+            </div>
+        </section>
+
+        <!-- Разбор ответов -->
+        <section class="screen" id="reviewScreen">
+            <div class="review-header">
+                <button class="back-btn" id="backToResult">← К результатам</button>
+                <span class="eyebrow">РАЗБОР РЕЗУЛЬТАТОВ</span>
+                <h1>Твои ответы</h1>
+                <p>Изучай ошибки, запоминай правильные ответы и становись лучше.</p>
+            </div>
+
+            <div id="reviewList" class="review-list"></div>
+
+            <button class="primary-btn" id="reviewRetryBtn">
+                Пройти заново →
+            </button>
+        </section>
+
+        <footer class="footer">
+            <p>© 2026 QuizMaster · Создано с ❤️ и JavaScript</p>
+        </footer>
+    </main>
+
+</body>
+</html>
